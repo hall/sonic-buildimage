@@ -12,13 +12,17 @@ MAINTAINER gulv@microsoft.com
 
 COPY ["no-check-valid-until", "/etc/apt/apt.conf.d/"]
 
+RUN apt-get update && apt-get install -y \
+        gnupg2
+
 RUN echo "deb [arch=amd64] http://debian-archive.trafficmanager.net/debian/ buster main contrib non-free" >> /etc/apt/sources.list && \
         echo "deb-src [arch=amd64] http://debian-archive.trafficmanager.net/debian/ buster main contrib non-free" >> /etc/apt/sources.list && \
         echo "deb [arch=amd64] http://debian-archive.trafficmanager.net/debian-security/ buster/updates main contrib non-free" >> /etc/apt/sources.list && \
         echo "deb-src [arch=amd64] http://debian-archive.trafficmanager.net/debian-security/ buster/updates main contrib non-free" >> /etc/apt/sources.list && \
         echo "deb [arch=amd64] http://debian-archive.trafficmanager.net/debian buster-backports main" >> /etc/apt/sources.list && \
         echo "deb [arch=amd64] http://packages.trafficmanager.net/debian/debian buster main contrib non-free" >> /etc/apt/sources.list && \
-        echo "deb [arch=amd64] http://packages.trafficmanager.net/debian/debian buster-updates main contrib non-free" >> /etc/apt/sources.list
+        echo "deb [arch=amd64] http://packages.trafficmanager.net/debian/debian buster-updates main contrib non-free" >> /etc/apt/sources.list && \
+        wget -O - http://packages.trafficmanager.net/debian/public_key.gpg | apt-key add -
 
 {%- if CONFIGURED_ARCH == "armhf" %}
 RUN echo "deb [arch=armhf] http://deb.debian.org/debian buster main contrib non-free" > /etc/apt/sources.list && \
